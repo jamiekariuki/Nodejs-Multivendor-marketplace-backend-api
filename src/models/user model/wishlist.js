@@ -10,7 +10,7 @@ const wishlistSchema = new mongoose.Schema(
 		posts: [
 			{
 				type: mongoose.Schema.Types.Mixed,
-				ref: "Post",
+				required: true,
 			},
 		],
 	},

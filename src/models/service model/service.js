@@ -29,8 +29,10 @@ const serviceSchema = new mongoose.Schema(
 			type: Number,
 			default: 0,
 		},
-		ratings: {
+		rating: {
 			type: Number,
+			enum: [1, 2, 3, 4, 5],
+			required: true,
 			default: 0,
 		},
 		reviews: [
