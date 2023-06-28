@@ -56,4 +56,4 @@ function arrayLimit(val) {
 
 const Service = mongoose.model("Service", serviceSchema);
 
-module.exports = Service;
+export default Service;

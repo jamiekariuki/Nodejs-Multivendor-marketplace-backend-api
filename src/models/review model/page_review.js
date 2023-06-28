@@ -22,4 +22,4 @@ const pageReviewSchema = new mongoose.Schema(
 
 const PageReview = mongoose.model("PageReview", pageReviewSchema);
 
-module.exports = PageReview;
+export default PageReview;

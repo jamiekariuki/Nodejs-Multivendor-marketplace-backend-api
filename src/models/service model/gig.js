@@ -34,4 +34,4 @@ const gigSchema = new mongoose.Schema(
 
 const Gig = mongoose.model("Gig", productSchema);
 
-module.exports = Gig;
+export default Gig;

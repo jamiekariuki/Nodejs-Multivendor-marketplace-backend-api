@@ -28,4 +28,4 @@ const itemReviewSchema = new mongoose.Schema(
 
 const ItemReview = mongoose.model("ItemReview", itemReviewSchema);
 
-module.exports = ItemReview;
+export default ItemReview;

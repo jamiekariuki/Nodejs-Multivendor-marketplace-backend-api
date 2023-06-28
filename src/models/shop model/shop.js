@@ -56,4 +56,4 @@ function arrayLimit(val) {
 
 const Shop = mongoose.model("Shop", shopSchema);
 
-module.exports = Shop;
+export default Shop;
