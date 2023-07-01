@@ -2,10 +2,13 @@ import mongoose from "mongoose";
 
 const serviceSchema = new mongoose.Schema(
 	{
-		serviceName: {
+		serviceUserName: {
 			type: String,
 			required: true,
 			unique: true,
+		},
+		serviceName: {
+			type: String,
 		},
 		serviceOwner: {
 			type: mongoose.Schema.Types.ObjectId,
@@ -17,7 +20,7 @@ const serviceSchema = new mongoose.Schema(
 		},
 		category: {
 			type: [String],
-			validate: [arrayLimit, "{PATH} exceeds the limit of 5"],
+			validate: [arrayLimit, "{PATH} exceeds the limit of 50"],
 		},
 		location: {
 			type: String,
@@ -31,16 +34,10 @@ const serviceSchema = new mongoose.Schema(
 		},
 		rating: {
 			type: Number,
-			enum: [1, 2, 3, 4, 5],
+			enum: [0, 1, 2, 3, 4, 5],
 			required: true,
 			default: 0,
 		},
-		reviews: [
-			{
-				type: mongoose.Schema.Types.ObjectId,
-				ref: "Review",
-			},
-		],
 		isVerified: {
 			type: Boolean,
 			default: false,
@@ -51,7 +48,7 @@ const serviceSchema = new mongoose.Schema(
 
 // Validation function for category array limit
 function arrayLimit(val) {
-	return val.length <= 5;
+	return val.length <= 50;
 }
 
 const Service = mongoose.model("Service", serviceSchema);

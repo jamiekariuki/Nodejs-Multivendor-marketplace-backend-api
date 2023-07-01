@@ -2,10 +2,13 @@ import mongoose from "mongoose";
 
 const shopSchema = new mongoose.Schema(
 	{
-		shopName: {
+		shopUserName: {
 			type: String,
 			required: true,
 			unique: true,
+		},
+		shopName: {
+			type: String,
 		},
 		shopOwner: {
 			type: mongoose.Schema.Types.ObjectId,
@@ -17,7 +20,7 @@ const shopSchema = new mongoose.Schema(
 		},
 		category: {
 			type: [String],
-			validate: [arrayLimit, "{PATH} exceeds the limit of 5"],
+			validate: [arrayLimit, "{PATH} exceeds the limit of 50"],
 		},
 		location: {
 			type: String,
@@ -27,7 +30,7 @@ const shopSchema = new mongoose.Schema(
 		},
 		rating: {
 			type: Number,
-			enum: [1, 2, 3, 4, 5],
+			enum: [0, 1, 2, 3, 4, 5],
 			required: true,
 			default: 0,
 		},
@@ -35,12 +38,6 @@ const shopSchema = new mongoose.Schema(
 			type: Number,
 			default: 0,
 		},
-		reviews: [
-			{
-				type: mongoose.Schema.Types.ObjectId,
-				ref: "Review",
-			},
-		],
 		isVerified: {
 			type: Boolean,
 			default: false,
@@ -51,7 +48,7 @@ const shopSchema = new mongoose.Schema(
 
 // Validation function for category array limit
 function arrayLimit(val) {
-	return val.length <= 5;
+	return val.length <= 50;
 }
 
 const Shop = mongoose.model("Shop", shopSchema);

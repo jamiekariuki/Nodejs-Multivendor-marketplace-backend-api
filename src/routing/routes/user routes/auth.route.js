@@ -15,18 +15,18 @@ router.post("/register", async (req, res) => {
 	try {
 		//validation
 		const { error } = registerValidation(req.body);
-		if (error) return res.status(400).send(error.details[0].message);
+		if (error) return res.status(400).json(error.details[0].message);
 
 		//verifying if username is unique
 		const userNameExist = await User.findOne({
 			userName: req.body.userName,
 		});
 		if (userNameExist)
-			return res.status(400).send("username already exist");
+			return res.status(400).json("username already exist");
 
 		//verifying if email is unique
 		const userEmailExist = await User.findOne({ email: req.body.email });
-		if (userEmailExist) return res.status(400).send("email already exist");
+		if (userEmailExist) return res.status(400).json("email already exist");
 
 		//password hashing
 		const hashedPass = bcrypt.hashSync(req.body.password, 10);
@@ -39,7 +39,7 @@ router.post("/register", async (req, res) => {
 		const savedUser = await newUser.save();
 		res.status(201).json("user has been created");
 	} catch (error) {
-		res.status(500).send("something went wrong");
+		res.status(500).json(error);
 	}
 });
 
@@ -47,14 +47,14 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
 	//check if user had signed in
 	const user = await User.findOne({ userName: req.body.userName });
-	if (!user) return res.status(400).send("account does not exist");
+	if (!user) return res.status(400).json("account does not exist");
 
 	//compare if password exist
 	const passwordCompare = bcrypt.compareSync(
 		req.body.password,
 		user.password
 	);
-	if (!passwordCompare) return res.status(400).send("Incorrect password");
+	if (!passwordCompare) return res.status(400).json("Incorrect password");
 
 	//jwt access token
 	const token = jwt.sign(
@@ -70,17 +70,29 @@ router.post("/login", async (req, res) => {
 	//send token as cookie and userDetails as response json
 	res.cookie("accesToken", token, { httpOnly: true })
 		.status(500)
-		.send(userDetails);
+		.json(userDetails);
 });
 
 //logout
-router.get("/logout", (req, res) => {
-	res.clearCookie("accessToken", {
-		sameSite: "none",
-		secure: true,
-	})
-		.status(200)
-		.send("you logged out of your account");
+router.get("/logout/:id", authoriseUser, async (req, res) => {
+	try {
+		//...continue from middlware and verify if the payload id from jwt is same as users id
+		const user = await User.findById(req.params.id);
+		if (!user) return res.status(403).json("account does not exist");
+		if (req.userid !== user._id.toString()) {
+			return res.status(403).json("you can only logout of your account");
+		}
+
+		//clear user cookie
+		res.clearCookie("accessToken", {
+			sameSite: "none",
+			secure: true,
+		})
+			.status(200)
+			.json("you logged out of your account");
+	} catch (error) {
+		res.status(500).json(error);
+	}
 });
 
 //update password
@@ -88,10 +100,9 @@ router.put("/update/:id", authoriseUser, async (req, res) => {
 	try {
 		//...continue from middlware and verify if the payload id from jwt is same as users id
 		const user = await User.findById(req.params.id);
-
-		if (!user) return res.status(403).send("account does not exist");
+		if (!user) return res.status(403).json("account does not exist");
 		if (req.userid !== user._id.toString()) {
-			return res.status(403).send("you can only update your account");
+			return res.status(403).json("you can only update your account");
 		}
 
 		//confirm if user  pass match with the previus pass
@@ -100,11 +111,11 @@ router.put("/update/:id", authoriseUser, async (req, res) => {
 			user.password
 		);
 		if (!passwordCompare)
-			return res.status(400).send("password do not match");
+			return res.status(400).json("password do not match");
 
 		//validate inputs
 		const { error } = passwordValidation(req.body.currentPassword);
-		if (error) return res.status(400).send(error.details[0].message);
+		if (error) return res.status(400).json(error.details[0].message);
 
 		//hashing the new password
 		const hashedPass = bcrypt.hashSync(req.body.currentPassword, 10);

@@ -16,7 +16,6 @@ router.get("/getuser/:id", async (req, res) => {
 		const { password, updatedAt, ...userDetails } = user._doc;
 
 		//send user details
-
 		res.status(200).send(userDetails);
 	} catch (error) {
 		res.status(500).json(error);
@@ -31,6 +30,16 @@ router.put("/update/:id", authoriseUser, async (req, res) => {
 		if (!user) return res.status(403).send("account does not exist");
 		if (req.userid !== user._id.toString()) {
 			return res.status(403).send("you can only update your account");
+		}
+
+		//checking if there is any other user with the new name and not this
+		const otherUser = await Service.findOne({
+			userName: req.body.userName,
+		});
+		if (otherUser) {
+			if (req.params.id !== otherUser._id.toString()) {
+				return res.status(403).json("this username is currently taken");
+			}
 		}
 
 		//validate inputs
