@@ -1,19 +1,24 @@
 import mongoose from "mongoose";
 
-const shopSchema = new mongoose.Schema(
+const pageSchema = new mongoose.Schema(
 	{
-		shopUserName: {
+		pageUserName: {
 			type: String,
 			required: true,
 			unique: true,
 		},
-		shopName: {
+		pageName: {
 			type: String,
 		},
-		shopOwner: {
+		pageOwner: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "User",
 			required: true,
+		},
+		type: {
+			type: String,
+			required: true,
+			enum: ["shop", "service", "freelancer"],
 		},
 		bio: {
 			type: String,
@@ -25,7 +30,7 @@ const shopSchema = new mongoose.Schema(
 		location: {
 			type: String,
 		},
-		shopIcon: {
+		pageIcon: {
 			type: String,
 		},
 		rating: {
@@ -51,6 +56,6 @@ function arrayLimit(val) {
 	return val.length <= 50;
 }
 
-const Shop = mongoose.model("Shop", shopSchema);
+const Page = mongoose.model("Page", pageSchema);
 
-export default Shop;
+export default Page;

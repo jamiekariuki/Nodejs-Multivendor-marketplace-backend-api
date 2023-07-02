@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 
-const productSchema = new mongoose.Schema(
+const postSchema = new mongoose.Schema(
 	{
-		shop: {
+		page: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: "Shop",
+			ref: "Page",
 			required: true,
 		},
-		productPicture: {
+		postPicture: {
 			type: String,
 		},
 		description: {
@@ -32,6 +32,6 @@ const productSchema = new mongoose.Schema(
 	{ timestamps: true }
 );
 
-const Product = mongoose.model("Product", productSchema);
+const Post = mongoose.model("Post", postSchema);
 
-export default Product;
+export default Post;

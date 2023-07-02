@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-const itemReviewSchema = new mongoose.Schema(
+const postReviewSchema = new mongoose.Schema(
 	{
-		item: {
+		post: {
 			//can be product or gig
 			type: mongoose.Schema.Types.Mixed,
 			required: true,
@@ -26,6 +26,6 @@ const itemReviewSchema = new mongoose.Schema(
 	{ timestamps: true }
 );
 
-const ItemReview = mongoose.model("ItemReview", itemReviewSchema);
+const PostReview = mongoose.model("PostReview", postReviewSchema);
 
-export default ItemReview;
+export default PostReview;
