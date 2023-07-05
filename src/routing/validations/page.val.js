@@ -10,7 +10,7 @@ export const pageValidation = (req) => {
 			"any.required": `"username" is a required field`,
 		}),
 		pageName: Joi.string(),
-		type: Joi.string().valid("shop", "service", "freelance").required(),
+		type: Joi.string().valid("shop", "service", "freelancer").required(),
 		bio: Joi.string().max(50),
 		category: Joi.array().max(50),
 		location: Joi.string(),

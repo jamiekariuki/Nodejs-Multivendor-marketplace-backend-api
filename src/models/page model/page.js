@@ -20,6 +20,15 @@ const pageSchema = new mongoose.Schema(
 			required: true,
 			enum: ["shop", "service", "freelancer"],
 		},
+		recommendations: {
+			type: [
+				{
+					type: mongoose.Schema.Types.ObjectId,
+					ref: "User",
+				},
+			],
+			default: [],
+		},
 		bio: {
 			type: String,
 		},
@@ -33,13 +42,11 @@ const pageSchema = new mongoose.Schema(
 		pageIcon: {
 			type: String,
 		},
-		rating: {
+		totalRatings: {
 			type: Number,
-			enum: [0, 1, 2, 3, 4, 5],
-			required: true,
 			default: 0,
 		},
-		ratings: {
+		ratingCount: {
 			type: Number,
 			default: 0,
 		},

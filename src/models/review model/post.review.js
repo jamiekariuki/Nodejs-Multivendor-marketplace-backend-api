@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 const postReviewSchema = new mongoose.Schema(
 	{
 		post: {
-			//can be product or gig
-			type: mongoose.Schema.Types.Mixed,
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Post",
 			required: true,
 		},
 		user: {

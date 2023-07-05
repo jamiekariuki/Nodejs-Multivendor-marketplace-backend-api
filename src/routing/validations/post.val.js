@@ -7,6 +7,7 @@ export const postValidation = (req) => {
 		category: Joi.string(),
 		price: Joi.number(),
 		title: Joi.string(),
+		type: Joi.string().valid("shop", "service", "freelance").required(),
 	});
 
 	return userSchema.validate(req);

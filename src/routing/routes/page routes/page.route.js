@@ -6,15 +6,39 @@ import { pageValidation } from "../../validations/page.val.js";
 const router = express.Router();
 
 //get page(s)
-router.get("/get/:id", async (req, res) => {
+router.get("/get", async (req, res) => {
+	const q = req.query;
+	//checking if query parameters exist and adding them in filter object
+	const filter = {
+		...(q.id && { _id: q.id }),
+		...(q.type && {
+			type: {
+				$regex: q.type,
+				$options: "i",
+			},
+		}),
+		...(q.cat && {
+			category: {
+				$in: q.cat.map((c) => new RegExp(c, "i")),
+			},
+		}),
+		...(q.search && {
+			pageUserName: {
+				$regex: q.search,
+				$options: "i",
+			},
+		}),
+	};
+
 	try {
 		//get page from id parameter, and validate if it exist
-		const page = await Page.findById(req.params.id);
+		const page = await Page.find(filter);
 		if (!page) return res.status(400).json("page does not exist");
 		//distructure sensitive information out from user before sending them
-		const { pageOwner, updatedAt, ...pageDetails } = page._doc;
+		/* const { pageOwner, updatedAt, ...pageDetails } = page._doc;
+		console.log(page) */
 
-		res.status(200).json(pageDetails);
+		res.status(200).json(page);
 	} catch (error) {
 		res.status(500).json(error);
 	}

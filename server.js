@@ -6,7 +6,9 @@ import authRoutes from "./src/routing/routes/user routes/auth.route.js";
 import userRoutes from "./src/routing/routes/user routes/user.route.js";
 import pageAuthRoutes from "./src/routing/routes/page routes/page.auth.route.js";
 import pageRoutes from "./src/routing/routes/page routes/page.route.js";
-import postRoutes from "./src/routing/routes/post.route.js";
+import postRoutes from "./src/routing/routes/post routes/post.route.js";
+import postReviewRoutes from "./src/routing/routes/review routes/post.review.route.js";
+import pageReviewRoutes from "./src/routing/routes/review routes/page.review.route.js";
 
 const app = express();
 dotenv.config();
@@ -34,7 +36,8 @@ app.use("/api/user", userRoutes);
 app.use("/api/pageauth", pageAuthRoutes);
 app.use("/api/page", pageRoutes);
 app.use("/api/post", postRoutes);
-
+app.use("/api/postreview", postReviewRoutes);
+app.use("/api/pagereview", pageReviewRoutes);
 //server connection
 app.listen(8000, () => {
 	connect();

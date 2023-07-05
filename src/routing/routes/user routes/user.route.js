@@ -2,9 +2,9 @@ import express from "express";
 import { userValidation } from "../../validations/auth.val.js";
 import { authoriseUser } from "../../middlwares/authorization.js";
 import User from "../../../models/user model/user.js";
+import Page from "../../../models/page model/page.js";
 
 const router = express.Router();
-
 //get user
 router.get("/get/:id", async (req, res) => {
 	try {
@@ -42,8 +42,11 @@ router.put("/update/:id", authoriseUser, async (req, res) => {
 		const { error } = userValidation(req.body);
 		if (error) return res.status(400).send(error.details[0].message);
 		//update user
-		await User.findByIdAndUpdate(req.params.id, { $set: req.body });
-		res.status(200).json("you have updated your account");
+		const updatedUser = await User.findByIdAndUpdate(req.params.id, {
+			$set: req.body,
+		});
+		const { password, ...userDetails } = updatedUser._doc;
+		res.status(200).json(userDetails);
 	} catch (error) {
 		res.status(500).json(error);
 	}
@@ -72,5 +75,74 @@ router.delete("/delete/:id", authoriseUser, async (req, res) => {
 		res.status(500).json(error);
 	}
 });
+
+//recommendations subscriptiom
+//recommend a page
+router.put("/recommend/:id", authoriseUser, async (req, res) => {
+	try {
+		//...continue from middlware and verify if the payload id from jwt is same as users id
+		const user = await User.findById(req.params.id);
+		if (!user) return res.status(403).send("account does not exist");
+		if (req.userid !== user._id.toString()) {
+			return res
+				.status(403)
+				.send("you are not authorized to perform this task");
+		}
+		//check if user has already recommend this page
+		const page = await Page.findById(req.body.pageId);
+		if (page.recommendations.includes(req.userid)) {
+			return res.status(403).send("you allready recommended this page");
+		}
+		//add user id to page recomendation and page id to user recommended
+		await Page.updateOne({
+			$push: {
+				recommendations: req.userid,
+			},
+		});
+		await User.updateOne({
+			$push: {
+				recommended: req.body.pageId,
+			},
+		});
+		res.status(200).json("you recommended this page");
+	} catch (error) {
+		res.status(500).json(error);
+	}
+});
+
+//unrecommend page
+router.put("/unrecommend/:id", authoriseUser, async (req, res) => {
+	try {
+		//...continue from middlware and verify if the payload id from jwt is same as users id
+		const user = await User.findById(req.params.id);
+		if (!user) return res.status(403).send("account does not exist");
+		if (req.userid !== user._id.toString()) {
+			return res
+				.status(403)
+				.send("you are not authorized to perform this task");
+		}
+		//check if user has already recommend this page
+		const page = await Page.findById(req.body.pageId);
+		if (!page.recommendations.includes(req.userid)) {
+			return res.status(403).send("you havent recommended this page");
+		}
+		//add user id to page recomendation and page id to user recommended
+		await Page.updateOne({
+			$pull: {
+				recommendations: req.userid,
+			},
+		});
+		await User.updateOne({
+			$pull: {
+				recommended: req.body.pageId,
+			},
+		});
+		res.status(200).json("you unrecommended this page");
+	} catch (error) {
+		res.status(500).json(error);
+	}
+});
+
+//
 
 export default router;

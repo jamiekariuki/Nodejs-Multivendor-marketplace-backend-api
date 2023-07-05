@@ -16,21 +16,17 @@ router.post("/register", async (req, res) => {
 		//validation
 		const { error } = registerValidation(req.body);
 		if (error) return res.status(400).json(error.details[0].message);
-
 		//verifying if username is unique
 		const userNameExist = await User.findOne({
 			userName: req.body.userName,
 		});
 		if (userNameExist)
 			return res.status(400).json("username already exist");
-
 		//verifying if email is unique
 		const userEmailExist = await User.findOne({ email: req.body.email });
 		if (userEmailExist) return res.status(400).json("email already exist");
-
 		//password hashing
 		const hashedPass = bcrypt.hashSync(req.body.password, 10);
-
 		const newUser = new User({
 			...req.body,
 			password: hashedPass,

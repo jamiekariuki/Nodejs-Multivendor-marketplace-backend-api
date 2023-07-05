@@ -7,13 +7,22 @@ const postSchema = new mongoose.Schema(
 			ref: "Page",
 			required: true,
 		},
+		type: {
+			type: String,
+			required: true,
+			enum: ["shop", "service", "freelancer"],
+		},
 		postPicture: {
 			type: String,
 		},
 		description: {
 			type: String,
 		},
-		ratings: {
+		totalRatings: {
+			type: Number,
+			default: 0,
+		},
+		ratingCount: {
 			type: Number,
 			default: 0,
 		},

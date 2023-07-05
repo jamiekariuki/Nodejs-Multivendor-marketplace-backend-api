@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
 			required: true,
 			unique: true,
 		},
+
 		name: {
 			type: String,
 			required: true,
@@ -22,6 +23,15 @@ const userSchema = new mongoose.Schema(
 		},
 		profilePicture: {
 			type: String,
+		},
+		recommended: {
+			type: [
+				{
+					type: mongoose.Schema.Types.ObjectId,
+					ref: "Page",
+				},
+			],
+			default: [],
 		},
 	},
 	{ timestamps: true }
