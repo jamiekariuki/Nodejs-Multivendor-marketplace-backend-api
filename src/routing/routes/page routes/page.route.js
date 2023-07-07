@@ -34,9 +34,6 @@ router.get("/get", async (req, res) => {
 		//get page from id parameter, and validate if it exist
 		const page = await Page.find(filter);
 		if (!page) return res.status(400).json("page does not exist");
-		//distructure sensitive information out from user before sending them
-		/* const { pageOwner, updatedAt, ...pageDetails } = page._doc;
-		console.log(page) */
 
 		res.status(200).json(page);
 	} catch (error) {
@@ -53,7 +50,7 @@ router.put("/update/:id", authoriseUser, async (req, res) => {
 		if (req.userid !== page.pageOwner.toString()) {
 			return res.status(403).json("you can only update your page");
 		}
-		//checking if there is any other service with the new name and not this
+		//checking if there is any other page with the new name and not this
 		const otherPage = await Page.findOne({
 			PageUserName: req.body.pageUserName,
 		});

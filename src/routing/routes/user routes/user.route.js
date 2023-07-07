@@ -90,16 +90,19 @@ router.put("/recommend/:id", authoriseUser, async (req, res) => {
 		}
 		//check if user has already recommend this page
 		const page = await Page.findById(req.body.pageId);
+		if (!page) {
+			return res.status(403).send("page does not exist");
+		}
 		if (page.recommendations.includes(req.userid)) {
 			return res.status(403).send("you allready recommended this page");
 		}
 		//add user id to page recomendation and page id to user recommended
-		await Page.updateOne({
+		await page.updateOne({
 			$push: {
 				recommendations: req.userid,
 			},
 		});
-		await User.updateOne({
+		await user.updateOne({
 			$push: {
 				recommended: req.body.pageId,
 			},
@@ -123,16 +126,19 @@ router.put("/unrecommend/:id", authoriseUser, async (req, res) => {
 		}
 		//check if user has already recommend this page
 		const page = await Page.findById(req.body.pageId);
+		if (!page) {
+			return res.status(403).send("page does not exist");
+		}
 		if (!page.recommendations.includes(req.userid)) {
 			return res.status(403).send("you havent recommended this page");
 		}
-		//add user id to page recomendation and page id to user recommended
-		await Page.updateOne({
+		//remove user id to page recomendation and page id to user recommended
+		await page.updateOne({
 			$pull: {
 				recommendations: req.userid,
 			},
 		});
-		await User.updateOne({
+		await user.updateOne({
 			$pull: {
 				recommended: req.body.pageId,
 			},

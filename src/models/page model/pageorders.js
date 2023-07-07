@@ -1,18 +1,18 @@
 import mongoose from "mongoose";
 
-const cartSchema = new mongoose.Schema(
+const pageorderSchema = new mongoose.Schema(
 	{
 		user: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "User",
 			required: true,
 		},
-
 		page: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Page",
 			required: true,
 		},
+
 		product: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Post",
@@ -22,10 +22,16 @@ const cartSchema = new mongoose.Schema(
 			type: Number,
 			default: 1,
 		},
+		status: {
+			type: String,
+			required: true,
+			enum: ["pending", "completed"],
+			default: "pending",
+		},
 	},
 	{ timestamps: true }
 );
 
-const Cart = mongoose.model("Cart", cartSchema);
+const PageOrder = mongoose.model("PageOrder", pageorderSchema);
 
-export default Cart;
+export default PageOrder;
