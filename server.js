@@ -12,6 +12,7 @@ import pageReviewRoutes from "./src/routing/routes/review routes/page.review.rou
 import cartRoutes from "./src/routing/routes/cart routes/cart.route.js";
 import orderRoutes from "./src/routing/routes/order routes/order.route.js";
 import wishlistRoutes from "./src/routing/routes/wishlist routes/wishlist.route.js";
+import chatRoutes from "./src/routing/routes/chat routes/chat.route.js";
 
 const app = express();
 dotenv.config();
@@ -44,6 +45,7 @@ app.use("/api/pagereview", pageReviewRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/order", orderRoutes);
 app.use("/api/wishlist", wishlistRoutes);
+app.use("/api/chat", chatRoutes);
 
 //server connection
 app.listen(8000, () => {

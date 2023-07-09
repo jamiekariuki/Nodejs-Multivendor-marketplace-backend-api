@@ -42,7 +42,7 @@ router.get("/get/:id", authoriseUser, async (req, res) => {
 	try {
 		//checking if either user or page exists and its authorize
 		const user = await User.findById(req.params.id);
-		//console.log(user);
+
 		if (user) {
 			if (req.userid !== user._id.toString()) {
 				return res
@@ -103,7 +103,7 @@ router.put("/update", authoriseUser, async (req, res) => {
 			{ status: "completed" },
 			{ new: true }
 		);
-		console.log("hey");
+
 		const updatedUserOrder = await UserOrder.findOneAndUpdate(
 			{
 				user: req.body.userId,

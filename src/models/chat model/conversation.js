@@ -2,23 +2,17 @@ import mongoose from "mongoose";
 
 const conversationSchema = new mongoose.Schema(
 	{
-		owner: {
-			type: mongoose.Schema.Types.Mixed,
+		ownerId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "User",
 			required: true,
 		},
-		otherPerson: {
-			type: mongoose.Schema.Types.Mixed,
+		receiverId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "User",
 			required: true,
 		},
-		conversationName: {
-			type: String,
-			required: true,
-		},
-		readByOwner: {
-			type: Boolean,
-			default: false,
-		},
-		readByOtherPerson: {
+		readByReciver: {
 			type: Boolean,
 			default: false,
 		},
