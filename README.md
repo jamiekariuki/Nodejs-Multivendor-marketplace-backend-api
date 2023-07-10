@@ -1,8 +1,6 @@
 <h1 align="center">Online Marketplace API</h1>
 
-<p align="center">
-  <img src="https://your-image-url.com" alt="Project Logo" width="200" height="200">
-</p>
+
 
 <p align="center">
   Welcome to the Online Marketplace API! This backend project provides a powerful and scalable API for an online marketplace platform. It is designed to mimic real-world scenarios by offering eCommerce features and a field for everyone to buy and sell products online.
