@@ -43,7 +43,7 @@
 2. Install the dependencies: `npm install`
 3. Configure the MongoDB connection in the project.
 4. Start the development server: `npm start`
-5. Access the API endpoints at `http://localhost:3000`
+5. Access the API endpoints at `http://localhost:8000`
 
 ## API Documentation
 
